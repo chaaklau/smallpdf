@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Compress PDF files locally in your browser with MuPDF/WASM. Files never leave your device."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <title>Local PDF Compressor</title>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <div class="eyebrow">LOCAL • PRIVATE • STATIC</div>
+        <h1>Compress PDFs in your browser</h1>
+        <p>
+          Powered by MuPDF WebAssembly. Your PDF is processed on this device and
+          is never uploaded to a server.
+        </p>
+      </header>
+
+      <div class="workspace-grid">
+        <section class="panel" aria-labelledby="upload-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="upload-title">1. Choose a PDF</h2>
+            <p>Drop a file below or browse from your device.</p>
+          </div>
+          <span class="privacy-pill">No uploads</span>
+        </div>
+
+        <button class="dropzone" id="dropzone" type="button">
+          <span class="drop-icon" aria-hidden="true">PDF</span>
+          <span class="drop-title">Drop a PDF here</span>
+          <span class="drop-subtitle">or click to browse</span>
+        </button>
+        <input id="fileInput" type="file" accept="application/pdf,.pdf" hidden />
+
+        <div class="file-card is-hidden" id="fileCard" aria-live="polite">
+          <div class="file-badge">PDF</div>
+          <div class="file-details">
+            <strong id="fileName"></strong>
+            <span id="fileSize"></span>
+          </div>
+          <button class="text-button" id="removeFileButton" type="button">Remove</button>
+        </div>
+        </section>
+
+        <section class="panel" aria-labelledby="mode-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="mode-title">2. Pick a compression mode</h2>
+            <p>Start lossless. Use a flatten mode when you need a much smaller scan.</p>
+          </div>
+        </div>
+
+        <div class="preset-grid" role="radiogroup" aria-label="Compression mode">
+          <label class="preset-card is-selected">
+            <input type="radio" name="preset" value="lossless" checked />
+            <span class="preset-topline">
+              <strong>Lossless</strong>
+              <span class="tag">Recommended</span>
+            </span>
+            <span class="preset-description">
+              Preserves selectable text, links, forms, annotations and page content.
+            </span>
+            <span class="preset-meta">Garbage collection • stream compression • font subsetting</span>
+          </label>
+
+          <label class="preset-card">
+            <input type="radio" name="preset" value="balanced" />
+            <span class="preset-topline">
+              <strong>Balanced</strong>
+              <span class="tag muted">Flatten</span>
+            </span>
+            <span class="preset-description">
+              Good for scans and image-heavy PDFs where visual quality still matters.
+            </span>
+            <span class="preset-meta">160 DPI • JPEG quality 78</span>
+          </label>
+
+          <label class="preset-card">
+            <input type="radio" name="preset" value="small" />
+            <span class="preset-topline">
+              <strong>Small</strong>
+              <span class="tag muted">Flatten</span>
+            </span>
+            <span class="preset-description">
+              Prioritises file size for email, portals and archival copies.
+            </span>
+            <span class="preset-meta">120 DPI • JPEG quality 65</span>
+          </label>
+        </div>
+
+        <div class="warning is-hidden" id="flattenWarning" role="note">
+          <strong>Flatten mode changes the document structure.</strong>
+          Each page becomes a JPEG image. Selectable text, hyperlinks, forms, layers,
+          accessibility tags and editable annotations will no longer be interactive.
+        </div>
+        </section>
+      </div>
+
+      <section class="panel action-panel" aria-labelledby="compress-title">
+        <div>
+          <h2 id="compress-title">3. Compress</h2>
+          <p id="readyText">Choose a PDF to get started.</p>
+        </div>
+        <button class="primary-button" id="compressButton" type="button" disabled>
+          Compress PDF
+        </button>
+      </section>
+
+      <section class="panel progress-panel is-hidden" id="progressPanel" aria-live="polite">
+        <div class="progress-header">
+          <div>
+            <strong id="progressTitle">Preparing MuPDF…</strong>
+            <span id="progressDetail">Loading the WebAssembly engine.</span>
+          </div>
+          <button class="text-button" id="cancelButton" type="button">Cancel</button>
+        </div>
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </section>
+
+      <section class="panel result-panel is-hidden" id="resultPanel" aria-labelledby="result-title">
+        <div class="result-mark" aria-hidden="true">✓</div>
+        <div class="result-copy">
+          <h2 id="result-title">Compression complete</h2>
+          <p id="resultSummary"></p>
+          <div class="size-row">
+            <div>
+              <span>Original</span>
+              <strong id="originalResultSize"></strong>
+            </div>
+            <div class="arrow" aria-hidden="true">→</div>
+            <div>
+              <span>Result</span>
+              <strong id="compressedResultSize"></strong>
+            </div>
+            <div class="saving" id="savingBadge"></div>
+          </div>
+          <p class="result-note is-hidden" id="resultNote"></p>
+        </div>
+        <button class="primary-button" id="downloadButton" type="button">
+          Download PDF
+        </button>
+      </section>
+
+      <footer>
+        <p>
+          Runs entirely in your browser. Built with MuPDF.js/WASM. See the repository
+          README for licensing and flatten-mode limitations.
+        </p>
+      </footer>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
