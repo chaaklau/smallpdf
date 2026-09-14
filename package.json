@@ -13,7 +13,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "mupdf": "1.28.0"
+    "mupdf": "1.28.1"
   },
   "devDependencies": {
     "vite": "^6.4.3"
